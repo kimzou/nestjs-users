@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
 import { GraphQLFederationModule } from '@nestjs/graphql';
-import { UsersResolver } from './users/users.resolver';
-import { UsersService } from './users/users.service';
-
+import { MongooseModule } from '@nestjs/mongoose';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
+    MongooseModule.forRoot('mongodb://localhost/nest'),
     GraphQLFederationModule.forRoot({
       buildSchemaOptions: {
         numberScalarMode: 'integer',
       },
       autoSchemaFile: 'schema.graphql',
     }),
+    UsersModule,
   ],
-  providers: [UsersResolver, UsersService],
 })
 
 export class AppModule { }
