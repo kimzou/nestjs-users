@@ -15,6 +15,8 @@ directive @provides(fields: String!) on FIELD_DEFINITION
 type User {
   id: ID!
   name: String!
+  email: String!
+  password: String!
 }
 
 type Query {
@@ -24,8 +26,22 @@ type Query {
 
 type Mutation {
   createUser(createUserData: CreateUserInput!): User!
+  login(loginInput: LoginInput!): String!
+  register(registerInput: RegisterInput!): String!
+  sessionLogin(idToken: String!): String!
 }
 
 input CreateUserInput {
   name: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input RegisterInput {
+  name: String!
+  email: String!
+  password: String!
 }

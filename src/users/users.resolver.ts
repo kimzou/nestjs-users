@@ -1,6 +1,6 @@
-import { Args, Mutation, Query, Resolver, ResolveReference } from '@nestjs/graphql';
+import { Args, Context, GraphQLExecutionContext, Mutation, Query, Resolver, ResolveReference } from '@nestjs/graphql';
 import { User } from './user.entity';
-import { CreateUserInput } from './user.inputs';
+import { CreateUserInput, LoginInput, RegisterInput } from './user.inputs';
 import { User as UserModel } from './user.model';
 import { UsersService } from './users.service';
 
@@ -9,12 +9,12 @@ export class UsersResolver {
   constructor(private usersService: UsersService) { }
 
   @Query((returns) => User)
-  getUser(@Args('id') id: string): Promise<UserModel> {
+  getUser(@Args('id') id: string): Promise<UserModel|null> {
     return this.usersService.findById(id);
   }
 
   @Query((returns) => [User])
-  getUsers(): Promise<UserModel[]> {
+  getUsers(@Context() context): Promise<UserModel[]> {
     return this.usersService.all();
   }
 
@@ -30,14 +30,29 @@ export class UsersResolver {
     return this.usersService.create(createUserData);
   }
 
+  @Mutation(returns => String)// return token
+  login(@Args('loginInput') loginInput: LoginInput) {
+    return this.usersService.login(loginInput);
+  }
+
+  @Mutation(returns => String)
+  register(@Args('registerInput') registerInput: RegisterInput) {
+    return this.usersService.register(registerInput);
+  }
+
+  @Mutation(returns => String)
+  sessionLogin(@Args('idToken') idToken: string, @Context() ctx: GraphQLExecutionContext) {
+    return this.usersService.sessionLogin(idToken, ctx);
+  }
   // @ResolveReference()
   // resolveReference(reference: { __typename: string; id: number }): Promise<User> {
   //   return this.usersService.findById(reference.id);
   // }
-
+  // to access it from other service
   @ResolveReference()
   resolveReference(reference: { __typename: string; id: string }): Promise<UserModel> {
     console.log('reference', reference)
-    return this.usersService.findById(reference.id);
+    const { id } = reference;
+    return this.usersService.findById(id);
   }
 }

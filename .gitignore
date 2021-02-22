@@ -1,6 +1,12 @@
+# Firebase
+firebase-adminsdk.json
+
 # compiled output
 /dist
 /node_modules
+
+# ENV
+.env
 
 # Logs
 logs
