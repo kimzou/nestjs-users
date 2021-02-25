@@ -1,4 +1,5 @@
 import { Args, Context, GraphQLExecutionContext, Mutation, Query, Resolver, ResolveReference } from '@nestjs/graphql';
+import { AuthService } from './../auth/auth.service';
 import { User } from './user.entity';
 import { CreateUserInput, FirebaseUserCredentialInput } from './user.input';
 import { User as UserModel } from './user.model';
@@ -6,7 +7,10 @@ import { UsersService } from './users.service';
 
 @Resolver((of) => User)
 export class UsersResolver {
-  constructor(private usersService: UsersService) { }
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService
+  ) { }
 
   @Query((returns) => User)
   getUser(@Args('id') id: string): Promise<UserModel|null> {
@@ -40,23 +44,21 @@ export class UsersResolver {
     @Args('idToken') idToken: string,
     @Context() ctx: GraphQLExecutionContext
   ) {
-    return this.usersService.login(idToken, ctx);
+    return this.authService.login(idToken, ctx);
   }
 
   // @Mutation(returns => String)
   // register(@Args('registerInput') registerInput: RegisterInput) {
-  //   return this.usersService.register(registerInput);
+  //   return this.authService.register(registerInput);
   // }
 
-  @Mutation(returns => User)
+  @Mutation(returns => String)
   register(
-    // @Args('user') user: admin.auth.UserRecord,
-    // @Args('idToken') idToken: string,
     @Args('firebaseUserCredentialInput') firebaseUserCredentialInput: FirebaseUserCredentialInput,
     @Args('idToken') idToken: string,
     @Context() ctx: GraphQLExecutionContext
   ) {
-    return this.usersService.register({ firebaseUserCredentialInput, idToken, ctx });
+    return this.authService.register({ firebaseUserCredentialInput, idToken, ctx });
   }
 
   // @Mutation(returns => String)

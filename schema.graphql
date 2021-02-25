@@ -28,7 +28,7 @@ type Query {
 type Mutation {
   createUser(createUserData: CreateUserInput!): User!
   login(idToken: String!): String!
-  register(idToken: String!, firebaseUserCredentialInput: FirebaseUserCredentialInput!): User!
+  register(idToken: String!, firebaseUserCredentialInput: FirebaseUserCredentialInput!): String!
 }
 
 input CreateUserInput {

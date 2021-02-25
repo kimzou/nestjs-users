@@ -19,8 +19,10 @@ import { UsersModule } from './users/users.module';
         origin: 'http://localhost:3000'
       },
       context: ({ req, res }) => {
-        const session = req.headers.authorization || ''
-        // TODO: decode user
+        console.log('context req.hearders', req.headers)
+        const uid = req.headers?.['x-user-uid']
+        console.log('context', { uid })
+        // TODO: attach user to context
         return { req, res }
       }
     }),
