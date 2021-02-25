@@ -17,6 +17,7 @@ type User {
   name: String!
   email: String!
   password: String!
+  firebaseUid: String!
 }
 
 type Query {
@@ -26,22 +27,17 @@ type Query {
 
 type Mutation {
   createUser(createUserData: CreateUserInput!): User!
-  login(loginInput: LoginInput!): String!
-  register(registerInput: RegisterInput!): String!
-  sessionLogin(idToken: String!): String!
+  login(idToken: String!): String!
+  register(idToken: String!, firebaseUserRecordInput: FirebaseUserRecordInput!): User!
 }
 
 input CreateUserInput {
   name: String!
 }
 
-input LoginInput {
+input FirebaseUserRecordInput {
+  uid: String!
+  displayName: String
   email: String!
-  password: String!
-}
-
-input RegisterInput {
-  name: String!
-  email: String!
-  password: String!
+  emailVerified: Boolean
 }

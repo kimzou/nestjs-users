@@ -16,16 +16,23 @@ export class ListUserInput {
 export class LoginInput {
   @Field()
   email: string;
-  @Field()
   password: string;
 }
 
 @InputType()
 export class RegisterInput {
   @Field()
-  name?: string;
-  @Field()
+  name: string;
   email: string;
-  @Field()
   password: string;
+  uid: string
+}
+
+@InputType()
+export class FirebaseUserRecordInput {
+  @Field()
+  uid: string;
+  displayName?: string;
+  email: string;
+  emailVerified?: boolean;
 }

@@ -1,6 +1,6 @@
 import { Args, Context, GraphQLExecutionContext, Mutation, Query, Resolver, ResolveReference } from '@nestjs/graphql';
 import { User } from './user.entity';
-import { CreateUserInput, LoginInput, RegisterInput } from './user.inputs';
+import { CreateUserInput, FirebaseUserRecordInput } from './user.input';
 import { User as UserModel } from './user.model';
 import { UsersService } from './users.service';
 
@@ -30,20 +30,39 @@ export class UsersResolver {
     return this.usersService.create(createUserData);
   }
 
-  @Mutation(returns => String)// return token
-  login(@Args('loginInput') loginInput: LoginInput) {
-    return this.usersService.login(loginInput);
-  }
+  // @Mutation(returns => String)// return token
+  // login(@Args('loginInput') loginInput: LoginInput) {
+  //   return this.usersService.login(loginInput);
+  // }
 
   @Mutation(returns => String)
-  register(@Args('registerInput') registerInput: RegisterInput) {
-    return this.usersService.register(registerInput);
+  login(
+    @Args('idToken') idToken: string,
+    @Context() ctx: GraphQLExecutionContext
+  ) {
+    return this.usersService.login(idToken, ctx);
   }
 
-  @Mutation(returns => String)
-  sessionLogin(@Args('idToken') idToken: string, @Context() ctx: GraphQLExecutionContext) {
-    return this.usersService.sessionLogin(idToken, ctx);
+  // @Mutation(returns => String)
+  // register(@Args('registerInput') registerInput: RegisterInput) {
+  //   return this.usersService.register(registerInput);
+  // }
+
+  @Mutation(returns => User)
+  register(
+    // @Args('user') user: admin.auth.UserRecord,
+    // @Args('idToken') idToken: string,
+    @Args('firebaseUserRecordInput') firebaseUserRecordInput: FirebaseUserRecordInput,
+    @Args('idToken') idToken: string,
+    @Context() ctx: GraphQLExecutionContext
+  ) {
+    return this.usersService.register({ firebaseUserRecordInput, idToken, ctx });
   }
+
+  // @Mutation(returns => String)
+  // session(@Args('idToken') idToken: string, @Context() ctx: GraphQLExecutionContext) {
+  //   return this.usersService.session(idToken, ctx);
+  // }
   // @ResolveReference()
   // resolveReference(reference: { __typename: string; id: number }): Promise<User> {
   //   return this.usersService.findById(reference.id);
