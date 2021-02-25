@@ -4,7 +4,6 @@ import { AuthenticationError } from 'apollo-server-express';
 import * as admin from 'firebase-admin';
 import { Model } from 'mongoose';
 import { CreateUserInput } from './user.input';
-// import { User, UserRecord } from './user.entity';
 import { User, UserDocument } from './user.model';
 
 @Injectable()
@@ -42,44 +41,37 @@ export class UsersService {
   //   await createdUser.save()
   // }
 
-  async register({ firebaseUserRecordInput, idToken, ctx }) {
-    console.log('register', { firebaseUserRecordInput })
-    const { email, uid, displayName } = firebaseUserRecordInput;
-    console.log('register', { email, uid, displayName })
-    const { passwordHash = '123456' } = await admin.auth().getUser(uid)
-    // const userRecord = await (await admin.auth().getUser(uid)).toJSON()
-    // console.log({userRecord})
+  async register({ firebaseUserCredentialInput, idToken, ctx }) {
+
+    const { email, uid, displayName } = firebaseUserCredentialInput;
+
     try {
+      // check is email exists
+      const userExists = await this.userModel.findOne({ email });
+      if (userExists) throw new AuthenticationError('This email is already used');
+
+      // we have to fetch the user from admin to get the password
+      const { passwordHash = '123456' } = await admin.auth().getUser(uid);
+
+      // set new user properties and save it
+      const userProp = {
+        name: displayName,
+        email,
+        password: passwordHash,
+        firebaseUid: uid
+      }
+      const createdUser = new this.userModel(userProp);
+      await createdUser.save()
+      // create cookie session
       await this.session(idToken, ctx)
+      return createdUser;
+
     } catch (error) {
       console.log('Catch:', error)
     }
-    // check is email exists
-    const userExists = await this.userModel.findOne({ email });
-    if (userExists) throw new Error('This email is already used')
-    // set new user property and save it
-    const userProp = {
-      name: displayName,
-      email,
-      password: passwordHash,
-      firebaseUid: uid
-    }
-    const createdUser = new this.userModel(userProp);
-    await createdUser.save()
-    // create the cookie session
-    return createdUser;
   }
 
-  // async login(loginInput: LoginInput) {
-  //   const { email, password } = loginInput;
-  //   admin
-  //     .auth()
-  //     .createSessionCookie
-  //   return 'lol';
-  // }
-
   async login(idToken: string, ctx) {
-    console.log('login', {idToken})
     return await this.session(idToken, ctx);
   }
 
@@ -90,7 +82,6 @@ export class UsersService {
       const sessionCookie = await admin
         .auth()
         .createSessionCookie(idToken, { expiresIn })
-        // console.log({sessionCookie})
 
       // set the cookie only for this server, but not for the gateway
       const cookieOtp = {
@@ -98,7 +89,7 @@ export class UsersService {
         maxAge: expiresIn
       }
       ctx.res.cookie('session-cookie', sessionCookie, cookieOtp)
-      console.log({ sessionCookie })
+
       return sessionCookie;
     } catch (error) {
       throw new AuthenticationError(error);

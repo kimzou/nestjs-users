@@ -28,8 +28,10 @@ export class RegisterInput {
   uid: string
 }
 
-@InputType()
-export class FirebaseUserRecordInput {
+@InputType({
+    description: 'The user objet in UserCredential object returned by createUserWithEmailAndPassword method'
+})
+export class FirebaseUserCredentialInput {
   @Field()
   uid: string;
   displayName?: string;

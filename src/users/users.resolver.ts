@@ -1,6 +1,6 @@
 import { Args, Context, GraphQLExecutionContext, Mutation, Query, Resolver, ResolveReference } from '@nestjs/graphql';
 import { User } from './user.entity';
-import { CreateUserInput, FirebaseUserRecordInput } from './user.input';
+import { CreateUserInput, FirebaseUserCredentialInput } from './user.input';
 import { User as UserModel } from './user.model';
 import { UsersService } from './users.service';
 
@@ -52,11 +52,11 @@ export class UsersResolver {
   register(
     // @Args('user') user: admin.auth.UserRecord,
     // @Args('idToken') idToken: string,
-    @Args('firebaseUserRecordInput') firebaseUserRecordInput: FirebaseUserRecordInput,
+    @Args('firebaseUserCredentialInput') firebaseUserCredentialInput: FirebaseUserCredentialInput,
     @Args('idToken') idToken: string,
     @Context() ctx: GraphQLExecutionContext
   ) {
-    return this.usersService.register({ firebaseUserRecordInput, idToken, ctx });
+    return this.usersService.register({ firebaseUserCredentialInput, idToken, ctx });
   }
 
   // @Mutation(returns => String)
