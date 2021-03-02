@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { GraphQLFederationModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
-import { authMiddleware } from './auth/auth.middleware';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -10,7 +9,6 @@ import { UsersModule } from './users/users.module';
     GraphQLFederationModule.forRoot({
       buildSchemaOptions: {
         numberScalarMode: 'integer',
-        fieldMiddleware: [authMiddleware]
       },
       autoSchemaFile: 'schema.graphql',
       // authorize cookies to be send

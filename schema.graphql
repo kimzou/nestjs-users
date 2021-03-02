@@ -27,20 +27,8 @@ type Query {
 
 type Mutation {
   createUser(createUserData: CreateUserInput!): User!
-  login(idToken: String!): String!
-  register(idToken: String!, firebaseUserCredentialInput: FirebaseUserCredentialInput!): String!
 }
 
 input CreateUserInput {
   name: String!
-}
-
-"""
-The user objet in UserCredential object returned by createUserWithEmailAndPassword method
-"""
-input FirebaseUserCredentialInput {
-  uid: String!
-  displayName: String
-  email: String!
-  emailVerified: Boolean
 }
