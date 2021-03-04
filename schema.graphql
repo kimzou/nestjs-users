@@ -22,7 +22,6 @@ type User {
 
 type Post {
   id: ID!
-  authorId: String!
 }
 
 type Query {
@@ -36,4 +35,7 @@ type Mutation {
 
 input CreateUserInput {
   name: String!
+  email: String!
+  password: String!
+  firebaseUid: String!
 }

@@ -10,6 +10,4 @@ export class User {
   email: string;
   password: string;
   firebaseUid: string;
-  // @Directive('@provides(fields: "authorId")')
-  // posts?: Post[];
 }
