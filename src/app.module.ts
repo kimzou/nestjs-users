@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { GraphQLFederationModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
+import { Post } from './posts/post.entity';
+import { PostsModule } from './posts/posts.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -9,6 +11,8 @@ import { UsersModule } from './users/users.module';
     GraphQLFederationModule.forRoot({
       buildSchemaOptions: {
         numberScalarMode: 'integer',
+        orphanedTypes: [Post],
+
       },
       autoSchemaFile: 'schema.graphql',
       // authorize cookies to be send
@@ -17,14 +21,15 @@ import { UsersModule } from './users/users.module';
         origin: 'http://localhost:3000'
       },
       context: ({ req, res }) => {
-        console.log('context req.hearders', req.headers)
+        // console.log('context req.hearders', req.headers)
         const uid = req.headers?.['x-user-uid']
-        console.log('context', { uid })
+        // console.log('context', { uid })
         // TODO: attach user to context
         return { req, res }
       }
     }),
     UsersModule,
+    PostsModule,
   ],
 })
 

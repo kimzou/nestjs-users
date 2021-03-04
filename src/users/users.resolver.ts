@@ -20,30 +20,27 @@ export class UsersResolver {
     return this.usersService.all();
   }
 
-  // @ResolveReference()
-  // resolveReferenceUsers(reference: { __typename: string; id: string }): Promise<UserModel[]> {
-  //   console.log('reference', reference)
-  //   return this.usersService.all();
-  // }
-
   @Mutation(returns => User)
   createUser(@Args('createUserData') createUserData: CreateUserInput): Promise<UserModel> {
-    console.log("mutation")
     return this.usersService.create(createUserData);
   }
 
-  // @Mutation(returns => String)
-  // session(@Args('idToken') idToken: string, @Context() ctx: GraphQLExecutionContext) {
-  //   return this.usersService.session(idToken, ctx);
-  // }
   // @ResolveReference()
   // resolveReference(reference: { __typename: string; id: number }): Promise<User> {
   //   return this.usersService.findById(reference.id);
   // }
+  // find user of the post id
+  // @ResolveField((of) => Post)
+  // posts(@Parent() user: User): any {
+  //   console.log('posts resolve field in user', {user})
+  //   const { id } = user;
+  //   return { __typename: 'Post', authorId: id };
+  // }
+
   // to access it from other service
   @ResolveReference()
-  resolveReference(reference: { __typename: string; id: string }): Promise<UserModel> {
-    console.log('reference', reference)
+  resolveReference(reference: { __typename: string, id: string }): Promise<UserModel> {
+    console.log('•••••• reference', reference)
     if (reference.id === undefined) throw new Error('User not found')
     const { id } = reference;
     return this.usersService.findById(id);

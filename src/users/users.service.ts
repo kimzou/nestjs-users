@@ -10,21 +10,26 @@ export class UsersService {
 
   async all(): Promise<User[]> {
     const users = await this.userModel.find();
-    console.log({users})
     return users;
   }
 
   async create(createUserDto: CreateUserInput): Promise<User> {
     const createdUser = new this.userModel(createUserDto);
-    console.log({createdUser})
     return createdUser.save();
   }
 
   async findById(id: string): Promise<User|null> {
     const user = await this.userModel.findById(id);
-    console.log({user})
     return user;
   }
+  // find  user for a post
+  async forPosts(id: string): Promise<User> {
+    const user = await this.userModel.findById(id)
+    console.log({user})
+    return user
+  }
+
+
 
   // async register(registerInput: RegisterInput) {
   //   const { name, email, password } = registerInput;
