@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { GraphQLFederationModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Post } from './posts/post.entity';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -10,7 +9,6 @@ import { UsersModule } from './users/users.module';
     GraphQLFederationModule.forRoot({
       buildSchemaOptions: {
         numberScalarMode: 'integer',
-        orphanedTypes: [Post],
 
       },
       autoSchemaFile: 'schema.graphql',

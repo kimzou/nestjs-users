@@ -20,10 +20,6 @@ type User {
   firebaseUid: String!
 }
 
-type Post {
-  id: ID!
-}
-
 type Query {
   getUser(id: String!): User!
   getUsers: [User!]!

@@ -23,7 +23,7 @@ export class UsersResolver {
     return this.usersService.create(createUserData);
   }
 
-  // fetch user from other service
+  // fetch user from another service
   @ResolveReference()
   resolveReference(reference: { __typename: string, id: string }): Promise<UserModel> {
     if (reference.id === undefined) throw new Error('User not found')
