@@ -1,4 +1,6 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver, ResolveReference } from '@nestjs/graphql';
+import { AuthGuard } from 'src/guard/auth.guard';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './user.entity';
 import { User as UserModel } from './user.model';
@@ -13,6 +15,7 @@ export class UsersResolver {
     return this.usersService.findById(id);
   }
 
+  @UseGuards(AuthGuard)
   @Query((returns) => [User])
   getUsers(@Context() context): Promise<UserModel[]> {
     return this.usersService.all();

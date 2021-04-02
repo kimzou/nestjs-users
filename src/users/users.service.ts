@@ -9,7 +9,9 @@ export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async all(): Promise<User[]> {
+    console.log('------ ALL USERS')
     const users = await this.userModel.find();
+    console.log({users})
     return users;
   }
 

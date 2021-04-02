@@ -12,11 +12,10 @@ import { UsersModule } from './users/users.module';
 
       },
       autoSchemaFile: 'schema.graphql',
-      // authorize cookies to be send
-      cors: {
-        credentials: true,
-        origin: 'http://localhost:3000'
-      },
+      // cors: {
+      //   credentials: true,
+      //   origin: 'http://localhost:3000'
+      // },
       context: ({ req, res }) => {
         console.log('context req.hearders', req.headers)
         const uid = req.headers?.['x-user-uid']

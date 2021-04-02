@@ -16,8 +16,20 @@ type User {
   id: ID!
   name: String!
   email: String!
-  password: String!
   firebaseUid: String!
+  role: RoleType!
+}
+
+"""The role the user have"""
+enum RoleType {
+  """Role by default with limited access"""
+  STUDENT
+
+  """Teachers can access student's grades and created courses"""
+  TEACHER
+
+  """Admin has access to all functionalities"""
+  ADMIN
 }
 
 type Query {

@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { RoleType } from './user.entity';
 
 export type UserDocument = User & Document;
 @Schema()
@@ -20,8 +19,12 @@ export class User {
   @Prop({ required: true })
   firebaseUid: string;
 
-  @Prop({ required: true, default: RoleType.STUDENT })
-  role: RoleType
+  @Prop({
+    required: true,
+    default: 'STUDENT',
+    enum: ['STUDENT', 'TEACHER', 'ADMIN']
+  })
+  role: string
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

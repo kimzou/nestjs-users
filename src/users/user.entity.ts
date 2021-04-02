@@ -1,7 +1,7 @@
 import { Directive, Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 
 @ObjectType()
-// turns to an entity so it can be extended
+// transform to entity so it can be extended
 @Directive('@key(fields: "id")')
 export class User {
   @Field((type) => ID)
@@ -15,9 +15,9 @@ export class User {
 }
 
 export enum RoleType {
-  STUDENT,
-  TEACHER,
-  ADMIN
+  STUDENT = 'STUDENT',
+  TEACHER = 'TEACHER',
+  ADMIN = 'ADMIN'
 }
 
 registerEnumType(RoleType, {
